@@ -224,7 +224,7 @@ public class EntityHydrogenJellyfish extends AnimalEntity implements Flutterer
 		}
 		else
 		{
-			Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.field_19388) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
+			Explosion.DestructionType destructionType = this.world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE;
 			this.world.createExplosion(this, getX(), getEyeY(), getZ(), 7 * getScale(), destructionType);
 		}
 	}
@@ -269,7 +269,7 @@ public class EntityHydrogenJellyfish extends AnimalEntity implements Flutterer
 	public static boolean canSpawn(EntityType<? extends EntityHydrogenJellyfish> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random)
 	{
 		Box box = new Box(pos);
-		box.expand(32, 256, 32);
+		box.expand(64, 256, 64);
 		List<EntityHydrogenJellyfish> list = world.getEntities(EntityHydrogenJellyfish.class, box, (entity) -> { return true; });
 		return list.size() < 4;
 	}

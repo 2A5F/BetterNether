@@ -12,9 +12,12 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.Mutable;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 
 public class BlockStalactite extends BlockBaseNotFull
 {
@@ -89,6 +92,37 @@ public class BlockStalactite extends BlockBaseNotFull
 		}
 	}
 	
+	@Override
+	public void onBroken(WorldAccess world, BlockPos pos, BlockState state)
+	{
+		BlockPos pos2 = pos.up();
+		BlockState state2 = world.getBlockState(pos2);
+		if (state2.getBlock() instanceof BlockStalactite && state2.get(SIZE) < state.get(SIZE))
+		{
+			state2.getBlock().onBroken(world, pos2, state2);
+			world.breakBlock(pos2, true);
+		}
+		
+		pos2 = pos.down();
+		state2 = world.getBlockState(pos2);
+		if (state2.getBlock() instanceof BlockStalactite && state2.get(SIZE) < state.get(SIZE))
+		{
+			state2.getBlock().onBroken(world, pos2, state2);
+			world.breakBlock(pos2, true);
+		}
+	}
+	
+	@Override
+	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
+	{
+		return canPlace(world, pos, Direction.UP) || canPlace(world, pos, Direction.DOWN);
+	}
+	
+	private boolean canPlace(WorldView world, BlockPos pos, Direction dir)
+	{
+		return world.getBlockState(pos.offset(dir)).getBlock() instanceof BlockStalactite || Block.sideCoversSmallSquare(world, pos.offset(dir), dir.getOpposite());
+	}
+
 	static
 	{
 		SHAPES = new VoxelShape[8];

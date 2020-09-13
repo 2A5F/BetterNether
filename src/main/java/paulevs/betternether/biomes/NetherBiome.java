@@ -50,14 +50,16 @@ public class NetherBiome extends Biome
 	private ArrayList<StructureInfo> buildGeneratorsLava = new ArrayList<StructureInfo>();
 	private ArrayList<StructureInfo> buildGeneratorsUnder = new ArrayList<StructureInfo>();
 	
-	protected String name;
+	protected final String name;
+	protected final String namespace;
 	protected NetherBiome edge;
 	protected int edgeSize;
 	protected List<Subbiome> subbiomes;
-	protected NetherBiome parrent;
+	protected NetherBiome biomeParent;
 	protected float maxSubBiomeChance = 1;
 	protected float genChance = 1;
 	protected float noiseDensity = 0.3F;
+	protected float plantDensity = 1.0001F;
 	
 	private static final String[] DEF_STRUCTURES = new String[] {
 			structureFormat("altar_01", -2, StructureType.FLOOR, 1),
@@ -83,7 +85,13 @@ public class NetherBiome extends Biome
 			structureFormat("respawn_point_03", -3, StructureType.FLOOR, 1),
 			structureFormat("respawn_point_04", -2, StructureType.FLOOR, 1),
 			structureFormat("spawn_altar_ladder", -5, StructureType.FLOOR, 1),
-			structureFormat("ghast_hive", -20, StructureType.CEIL, 1F)
+			
+			structureFormat("ghast_hive", -20, StructureType.CEIL, 1F),
+			
+			structureFormat("lava/pyramid_1", -1, StructureType.LAVA, 1F),
+			structureFormat("lava/pyramid_2", -1, StructureType.LAVA, 1F),
+			structureFormat("lava/pyramid_3", -1, StructureType.LAVA, 1F),
+			structureFormat("lava/pyramid_4", -1, StructureType.LAVA, 1F)
 	};
 	
 	private ArrayList<String> structures;
@@ -100,11 +108,16 @@ public class NetherBiome extends Biome
 	
 	public NetherBiome(BiomeDefenition defenition)
 	{
+		this(defenition, true);
+	}
+	
+	public NetherBiome(BiomeDefenition defenition, boolean hasStalactites)
+	{
 		super(defenition.buildBiomeSettings());
 
 		this.addStructureFeature(DefaultBiomeFeatures.NETHER_RUINED_PORTAL);
 		this.addStructureFeature(DefaultBiomeFeatures.FORTRESS);
-	      this.addStructureFeature(DefaultBiomeFeatures.BASTION_REMNANT);
+	    this.addStructureFeature(DefaultBiomeFeatures.BASTION_REMNANT);
 
 		this.addCarver(GenerationStep.Carver.AIR, configureCarver(Carver.NETHER_CAVE, new ProbabilityConfig(0.2F)));
 		this.addFeature(GenerationStep.Feature.VEGETAL_DECORATION, Feature.SPRING_FEATURE.configure(DefaultBiomeFeatures.LAVA_SPRING_CONFIG).createDecoratedFeature(Decorator.COUNT_VERY_BIASED_RANGE.configure(new RangeDecoratorConfig(20, 8, 16, 256))));
@@ -133,6 +146,8 @@ public class NetherBiome extends Biome
 		this.addSpawnDensity(EntityType.GHAST, 1.0D, 0.04D);
 		
 		this.name = defenition.getName();
+		this.namespace = defenition.getGroup();
+		
 		subbiomes = new ArrayList<Subbiome>();
 		addStructure("cap_gen", new StructureWartCap(), StructureType.WALL, 0.8F, true);
 		subbiomes.add(new Subbiome(this, 1));
@@ -141,11 +156,24 @@ public class NetherBiome extends Biome
 		for (String s: DEF_STRUCTURES)
 			structures.add(s);
 		
-		addStructure("netherrack_stalactite", STALACTITE_NETHERRACK, StructureType.FLOOR, 0.05F, true);
-		addStructure("glowstone_stalactite", STALACTITE_GLOWSTONE, StructureType.FLOOR, 0.01F, true);
-		
-		addStructure("netherrack_stalagmite", STALAGMITE_NETHERRACK, StructureType.CEIL, 0.01F, true);
-		addStructure("glowstone_stalagmite", STALAGMITE_GLOWSTONE, StructureType.CEIL, 0.005F, true);
+		if (hasStalactites)
+		{
+			addStructure("netherrack_stalactite", STALACTITE_NETHERRACK, StructureType.FLOOR, 0.05F, true);
+			addStructure("glowstone_stalactite", STALACTITE_GLOWSTONE, StructureType.FLOOR, 0.01F, true);
+			
+			addStructure("netherrack_stalagmite", STALAGMITE_NETHERRACK, StructureType.CEIL, 0.01F, true);
+			addStructure("glowstone_stalagmite", STALAGMITE_GLOWSTONE, StructureType.CEIL, 0.005F, true);
+		}
+	}
+	
+	public void setPlantDensity(float density)
+	{
+		this.plantDensity = density * 1.0001F;
+	}
+	
+	public float getPlantDensity()
+	{
+		return plantDensity;
 	}
 	
 	public void setNoiseDensity(float density)
@@ -158,9 +186,14 @@ public class NetherBiome extends Biome
 		return (1F - this.noiseDensity) / 2F;
 	}
 	
+	private String getGroup()
+	{
+		return "generator.biome." + namespace + "." + getRegistryName();
+	}
+	
 	public void build()
 	{
-		String group = "generator.biome." + getRegistryName();
+		String group = getGroup();
 		String[] structAll = Config.getStringArray(group, "schematics", structures.toArray(new String[] {}));
 		for (String struct: structAll)
 		{
@@ -214,14 +247,9 @@ public class NetherBiome extends Biome
 		return SCATTER.eval(pos.getX() * 0.1, pos.getY() * 0.1 + id * 10, pos.getZ() * 0.1);
 	}
 	
-	public String getBiomeName()
-	{
-		return name;
-	}
-	
 	public String getRegistryName()
 	{
-		return name.toLowerCase().replace(' ', '_');
+		return name;
 	}
 
 	public NetherBiome getEdge()
@@ -232,7 +260,7 @@ public class NetherBiome extends Biome
 	public void setEdge(NetherBiome edge)
 	{
 		this.edge = edge;
-		edge.parrent = this;
+		edge.biomeParent = this;
 	}
 
 	public int getEdgeSize()
@@ -248,7 +276,7 @@ public class NetherBiome extends Biome
 	public void addSubBiome(NetherBiome biome, float chance)
 	{
 		maxSubBiomeChance += chance;
-		biome.parrent = this;
+		biome.biomeParent = this;
 		subbiomes.add(new Subbiome(biome, maxSubBiomeChance));
 	}
 	
@@ -261,9 +289,9 @@ public class NetherBiome extends Biome
 		return this;
 	}
 	
-	public NetherBiome getParrentBiome()
+	public NetherBiome getParentBiome()
 	{
-		return this.parrent;
+		return this.biomeParent;
 	}
 	
 	public boolean hasEdge()
@@ -271,19 +299,19 @@ public class NetherBiome extends Biome
 		return edge != null;
 	}
 	
-	public boolean hasParrent()
+	public boolean hasParentBiome()
 	{
-		return parrent != null;
+		return biomeParent != null;
 	}
 	
 	public boolean isSame(NetherBiome biome)
 	{
-		return biome == this || (biome.hasParrent() && biome.getParrentBiome() == this);
+		return biome == this || (biome.hasParentBiome() && biome.getParentBiome() == this);
 	}
 	
 	protected void addStructure(String name, IStructure structure, StructureType type, float density, boolean useNoise)
 	{
-		String group = "generator.biome." + getRegistryName() + ".procedural." + type.getName() + "." + name;
+		String group = getGroup() + ".procedural." + type.getName() + "." + name;
 		float dens = Config.getFloat(group, "density", density);
 		boolean limit = Config.getBoolean(group, "limit", useNoise);
 		this.addStructure(structure, type, dens, limit);
@@ -494,5 +522,10 @@ public class NetherBiome extends Biome
 	public void setSpawnDensity(EntityType<?> type, double maxMass, double mass)
 	{
 		this.addSpawnDensity(type, maxMass, mass);
+	}
+
+	public String getNamespace()
+	{
+		return namespace;
 	}
 }

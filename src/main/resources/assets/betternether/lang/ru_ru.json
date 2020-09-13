@@ -20,14 +20,15 @@
 	"item.betternether.cincinnasite_pickaxe": "Цинцинназитовая кирка",
 	"item.betternether.cincinnasite_pickaxe_diamond": "Цинцинназитово-алмазная кирка",
 
+	"block.betternether.stalagnate_bowl": "Сталагнатовая миска",
 	"item.betternether.stalagnate_bowl": "Сталагнатовая миска",
-	"item.betternether.stalagnate_bowl_apple": "Чёрное яблоко",
+	"item.betternether.stalagnate_bowl_apple": "Mиска c чёрным яблоком",
 	"item.betternether.stalagnate_bowl_mushroom": "Грибной суп",
 	"item.betternether.stalagnate_bowl_wart": "Суп из наростов",
 
 	"itemGroup.betternether.items": "Улучшенный Нижний Мир",
 
-	"message.spawn_help": "§c§lВы должны держать светокаменную пыль для установления точки возрождения",
+	"message.spawn_help": "§c§lВы должны держать§r %s §c§lдля установления точки возрождения",
 	"message.spawn_set": "§2§lВаша точка возрождения установлена здесь",
 
 	"block.betternether.agave": "Агава",
@@ -36,6 +37,10 @@
 
 	"block.betternether.black_apple_seed": "Семя чёрного яблока",
 	"block.betternether.black_bush": "Чёрный куст",
+	
+	"block.betternether.red_large_mushroom": "Большой красный гриб",
+	"block.betternether.brown_large_mushroom": "Большой коричневый гриб",
+	"block.betternether.lucis_mushroom": "Гриб Люцис",
 
 	"block.betternether.eyeball": "Блок глаза",
 	"block.betternether.eyeball_small": "Маленький блок глаза",
@@ -101,6 +106,8 @@
 	"block.betternether.nether_mycelium": "Мицелий нижнего мира",
 	"block.betternether.nether_reed": "Тростник нижнего мира",
 	"block.betternether.netherrack_furnace": "Печь из камня нижнего мира",
+	"block.betternether.blackstone_furnace": "Печь из чернита",
+	"block.betternether.basalt_furnace": "Печь из базальта",
 	"block.betternether.netherrack_moss": "Мох нижнего мира",
 
 	"block.betternether.orange_mushroom": "Оранжевый гриб",
@@ -162,7 +169,7 @@
 	"block.betternether.smoker": "Курильщик",
 
 	"block.betternether.stalagnate": "Сталагнат",
-	"block.betternether.stalagnate_stem": "Сталагнат",
+	"block.betternether.stalagnate_stem": "Стебель сталагната",
 	"block.betternether.stalagnate_log": "Бревно сталагната",
 	"block.betternether.stalagnate_bark": "Древесина сталагната",
 	"block.betternether.stalagnate_bowl_placed": "Сталагнатовая миска",
@@ -177,6 +184,9 @@
 	"block.betternether.stalagnate_planks_trapdoor": "Сталагнатовый люк",
 	"block.betternether.stalagnate_seed": "Семя сталагната",
 	"block.betternether.wart_seed": "Семя нароста",
+	
+	"block.betternether.eye_vine": "Глазнвя лоза",
+	"block.betternether.black_apple": "Куст чёрного яблока",
 
 	"commands.findnethercity.usage.console": "Не указаны координаты",
 	"commands.findnethercity.usage.coordinates": "Неверный формат координат",
@@ -349,7 +359,8 @@
 	"biome.betternether.nether_mushroom_forest": "Адский грибной лес",
 	"biome.betternether.nether_mushroom_forest_edge": "Окраина адского грибного леса",
 	"biome.betternether.wart_forest_edge": "Ораина наростового леса",
-	"biome.betternether.bone_reef": "Костяные рифы",
+	"biome.betternether.bone_reef": "Костяной риф",
+	"biome.betternether.sulfuric_bone_reef": "Серный костяной риф",
 	"biome.betternether.poor_grasslands": "Обеднённые луга",
 	"biome.betternether.nether_swampland": "Адское болото",
 	"biome.betternether.nether_swampland_terraces": "Террасированное адское болото",
@@ -378,6 +389,7 @@
 	"block.betternether.mushroom_fir_plate": "Нажимная плита из грибной ели",
 	"block.betternether.mushroom_fir_trapdoor": "Люк из грибной ели",
 	"block.betternether.mushroom_fir_door": "Дверь из грибной ели",
+	"block.betternether.mushroom_fir_ladder": "Лестница из грибной ели",
 	
 	"block.betternether.chair_mushroom_fir": "Стул из грибной ели",
 	"block.betternether.taburet_mushroom_fir": "Табурет из грибной ели",
@@ -461,7 +473,7 @@
 	
 	"block.betternether.netherrack_stalactite": "Незеритовый сталактит",
 	"block.betternether.glowstone_stalactite": "Светокаменный сталактит",
-	"block.betternether.blackstone_stalactite": "Чернокаменный сталактит",
+	"block.betternether.blackstone_stalactite": "Чернитовый сталактит",
 	"block.betternether.basalt_stalactite": "Базальтовый сталактит",
 	
 	"block.betternether.nether_ruby_ore": "Руда рубина нижнего мира",
@@ -497,5 +509,109 @@
 	"block.betternether.basalt_bricks": "Базальтовые кирпичи",
 	"block.betternether.basalt_bricks_stairs": "Ступени из базальтовых кирпичей",
 	"block.betternether.basalt_bricks_slab": "Плита из базальтовых кирпичей",
-	"block.betternether.basalt_bricks_wall": "Стена из базальтовых кирпичей"
+	"block.betternether.basalt_bricks_wall": "Стена из базальтовых кирпичей",
+	
+	"item.betternether.cincinnasite_hoe": "Цинцинназитовая мотыга",
+	"item.betternether.cincinnasite_hoe_diamond": "Цинцинназитово-алмазная мотыга",
+	"item.betternether.nether_ruby_hoe": "Мотыга из рубина нижнего мира",
+	"item.betternether.nether_ruby_hammer": "Молот из рубина нижнего мира",
+	
+	"config.betternether.config": "Настройки BetterNether",
+	"config.betternether.mod_reload": "§b§lВам необходимо перезапустить Minecraft после изменений!",
+	"config.betternether.rendering": "Настройки графики",
+	"config.betternether.blocks": "Регистрация блоков",
+	"config.betternether.items": "Регистрация предметов",
+	"config.betternether.biomes": "Настройки биомов",
+	"config.betternether.subbiomes": "Настройки подбиомов",
+	"config.betternether.biomes_edges": "Настройки пограничных биомов",
+	"config.betternether.generator": "Настройки генерации",
+	"config.betternether.global_structures_density": "Глобальная плотность растений и структур",
+	"config.betternether.structures_density": "Плотность структур",
+	"config.betternether.cities_dist": "Расстояние между городами [в чанках]",
+	
+	"config.betternether.reset": "Сбросить",
+	"config.betternether.fog": "Расстояние до тумана",
+	"config.betternether.lavafalls": "§b*§rЧастицы лавопадов",
+	"config.betternether.armour": "§b*§rТонкая броня",
+	
+	"block.betternether.crafting_table_crimson": "Багровый верстак",
+	"block.betternether.crafting_table_warped": "Искажённый верстак",
+	
+	"block.betternether.crafting_table_stalagnate": "Сталагнатовый верстак",
+	"block.betternether.crafting_table_reed": "Тростниковый верстак",
+	"block.betternether.crafting_table_willow": "Ивовый верстак",
+	"block.betternether.crafting_table_wart": "Верстак из нароста",
+	"block.betternether.crafting_table_rubeus": "Рубейсовый верстак",
+	"block.betternether.crafting_table_mushroom": "Грибной верстак",
+	"block.betternether.crafting_table_mushroom_fir": "Верстак из грибной ели",
+	
+	"block.betternether.chest_stalagnate": "Сталагнатовый сундук",
+	"block.betternether.chest_reed": "Тростниковый сундук",
+	"block.betternether.chest_willow": "Ивовый сундук",
+	"block.betternether.chest_wart": "Сундук из нароста",
+	"block.betternether.chest_rubeus": "Рубейсовый сундук",
+	"block.betternether.chest_mushroom": "Грибной сундук",
+	"block.betternether.chest_mushroom_fir": "Сундук из грибной ели",
+	
+	"block.betternether.chest_crimson": "Багровый сундук",
+	"block.betternether.chest_warped": "Искажённый сундук",
+	
+	"block.betternether.jungle_moss": "Мох джунглей",
+	
+	"block.betternether.feather_fern": "Перистый папоротник",
+	
+	"block.betternether.sign_stalagnate": "Сталагнатовая табличка",
+	"block.betternether.sign_reed": "Тростниковая табличка",
+	"block.betternether.sign_willow": "Ивовая табличка",
+	"block.betternether.sign_wart": "Табличка из нароста",
+	"block.betternether.sign_rubeus": "Рубейсовая табличка",
+	"block.betternether.sign_mushroom": "Грибная табличка",
+	"block.betternether.sign_mushroom_fir": "Табличка из грибной ели",
+	
+	"block.betternether.barrel_stalagnate": "Сталагнатовая бочка",
+	"block.betternether.barrel_reed": "Тростниковая бочка",
+	"block.betternether.barrel_willow": "Ивовая бочка",
+	"block.betternether.barrel_wart": "Бочка из нароста",
+	"block.betternether.barrel_rubeus": "Рубейсовая бочка",
+	"block.betternether.barrel_mushroom": "Грибная бочка",
+	"block.betternether.barrel_mushroom_fir": "бочка из грибной ели",
+	
+	"block.betternether.barrel_crimson": "Багровая бочка",
+	"block.betternether.barrel_warped": "Искажённая бочка",
+	
+	"block.betternether.crimson_ladder": "Багровая лестница",
+	"block.betternether.warped_ladder": "Искажённая лестница",
+	"block.betternether.mushroom_ladder": "Грибная лестница",
+	
+	"block.betternether.taburet_crimson": "Багровый табурет",
+	"block.betternether.taburet_warped": "Искажённый табурет",
+	"block.betternether.taburet_mushroom": "Грибной табурет",
+	
+	"block.betternether.chair_crimson": "Багровый стул",
+	"block.betternether.chair_warped": "Искажённый стул",
+	"block.betternether.chair_mushroom": "Грибной стул",
+	
+	"block.betternether.bar_stool_crimson": "Багровый барный стул",
+	"block.betternether.bar_stool_warped": "Искажённый барный стул",
+	"block.betternether.bar_stool_mushroom": "Грибной барный стул",
+	
+	"block.betternether.mushroom_grass": "Грибная трава",
+	"block.betternether.bone_grass": "Костяная трава",
+	"block.betternether.lumabus_seed": "Семя люмабуса",
+	"block.betternether.lumabus_vine": "Лоза люмабуса",
+	"item.betternether.glowstone_pile": "Щепотка глоустоуна",
+	"block.betternether.jellyfish_mushroom": "Медузовый гриб",
+	"block.betternether.jellyfish_mushroom_sapling": "Саженец медузового гриба",
+	"block.betternether.bone_stalactite": "Костяной сталактит",
+	"block.betternether.cincinnasite_chain": "Цинцинназитовая цепь",
+	"block.betternether.nether_lapis_ore": "Лазуритовая руда нижнего мира",
+	"item.betternether.lapis_pile": "Щепотка лазурита",
+	"item.betternether.cincinnasite_excavator": "Цинцинназитовый экскаватор",
+	"item.betternether.cincinnasite_excavator_diamond": "Цинцинназитово-алмазный экскаватор",
+	"item.betternether.nether_ruby_excavator": "Рубиновый экскаватор",
+	
+	"block.betternether.sepia_mushroom_grass": "Сепиевая грибная трава",
+	"block.betternether.sepia_bone_grass": "Сепиевая грибная трава",
+	"block.betternether.golden_lumabus_seed": "Золотое семя люмабуса",
+	"block.betternether.golden_lumabus_vine": "Золотая лоза люмабуса"
 }

@@ -1,5 +1,6 @@
 package paulevs.betternether.entity;
 
+import java.util.List;
 import java.util.Random;
 
 import net.fabricmc.api.EnvType;
@@ -19,10 +20,14 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Difficulty;
@@ -38,6 +43,7 @@ public class EntitySkull extends HostileEntity implements Flutterer
 	private static double particleZ;
 	private int attackTick;
 	private int dirTickTick;
+	private int collideTick;
 	
 	public EntitySkull(EntityType<? extends EntitySkull> type, World world)
 	{
@@ -59,7 +65,7 @@ public class EntitySkull extends HostileEntity implements Flutterer
 				.add(EntityAttributes.GENERIC_FOLLOW_RANGE, 20.0)
 				.add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5)
 				.add(EntityAttributes.GENERIC_FLYING_SPEED, 0.5)
-				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 2.0)
+				.add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0)
 				.build();
 	}
 	
@@ -79,7 +85,38 @@ public class EntitySkull extends HostileEntity implements Flutterer
 	@Override
 	public void onPlayerCollision(PlayerEntity player)
 	{
-		player.damage(DamageSource.GENERIC, 3);
+		collideTick ++;
+		if (collideTick > 3)
+		{
+			collideTick = 0;
+			
+			boolean shield = player.getActiveItem().getItem() instanceof ShieldItem && player.isUsingItem();
+			if (shield)
+			{
+				player.playSound(SoundEvents.ITEM_SHIELD_BLOCK, MHelper.randRange(0.8F, 1.2F, random), MHelper.randRange(0.8F, 1.2F, random));
+				this.setVelocity(new Vec3d(0, 0, 0).subtract(getVelocity()));
+			}
+			if (player instanceof ServerPlayerEntity)
+			{
+				if (shield)
+				{
+					player.getActiveItem().damage(1, random, (ServerPlayerEntity) player);
+					if (player.getActiveItem().getDamage() > player.getActiveItem().getMaxDamage())
+					{
+						player.sendToolBreakStatus(player.getActiveHand());
+						if (player.getActiveHand().equals(Hand.MAIN_HAND))
+							player.inventory.main.clear();
+						else if (player.getActiveHand().equals(Hand.OFF_HAND))
+							player.inventory.offHand.clear();
+						player.clearActiveItem();
+					}
+					return;
+				}
+				player.damage(DamageSource.GENERIC, 1);
+				if (random.nextInt(16) == 0)
+					player.setOnFireFor(3);
+			}
+		}
 	}
 	
 	@Override
@@ -102,7 +139,7 @@ public class EntitySkull extends HostileEntity implements Flutterer
 			this.world.addParticle(ParticleTypes.FLAME, particleX, particleY, particleZ, 0, 0, 0);
 		}
 		
-		if (attackTick > 40)
+		if (attackTick > 40 && this.isAlive())
 		{
 			PlayerEntity target = EntitySkull.this.world.getClosestPlayer(getX(), getY(), getZ(), 20, true);
 			if (target != null && this.canSee(target))
@@ -250,6 +287,12 @@ public class EntitySkull extends HostileEntity implements Flutterer
 	
 	public static boolean canSpawn(EntityType<? extends EntitySkull> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random)
 	{
-		return world.getDifficulty() != Difficulty.PEACEFUL && world.getLightLevel(pos) < 8;
+		if (world.getDifficulty() == Difficulty.PEACEFUL || world.getLightLevel(pos) > 7)
+			return false;
+		
+		Box box = new Box(pos);
+		box.expand(256, 256, 256);
+		List<EntitySkull> list = world.getEntities(EntitySkull.class, box, (entity) -> { return true; });
+		return list.size() < 4;
 	}
 }

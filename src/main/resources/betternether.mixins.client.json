@@ -8,7 +8,10 @@
 	"StandArmorMixin",
 	"PlayerArmorMixin",
 	"PresetsScreenMixin",
-	"ModelLoaderMixin"
+	"ModelLoaderMixin",
+	"MinecraftClientMixin",
+	"RenderPhaseMixin",
+	"ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -21,10 +21,17 @@ public class RecipesHelper
 	private static final String[] SHAPE_2X3 = new String[] {"##", "##", "##"};
 	private static final String[] SHAPE_3X2 = new String[] {"###", "###"};
 	private static final String[] SHAPE_COLORING = new String[] {"###", "#I#", "###"};
+	private static final String[] SHAPE_ROUND = new String[] {"###", "# #", "###"};
+	private static final String[] SHAPE_SIGN = new String[] {"###", "###", " I "};
+	private static final String[] SHAPE_BARREL = new String[] {"#S#", "# #", "#S#"};
+	private static final String[] SHAPE_LADDER = new String[] {"I I", "I#I", "I I"};
+	private static final String[] SHAPE_TABURET = new String[] {"##", "II"};
+	private static final String[] SHAPE_CHAIR = new String[] {"I ", "##", "II"};
+	private static final String[] SHAPE_BAR_STOOL = new String[] {"##", "II", "II"};
 	
 	private static void makeSingleRecipe(String group, Block source, Block result, String[] shape, int count)
 	{
-		if (Registry.BLOCK.getId(source) != null)
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
 		{
 			String name = Registry.BLOCK.getId(source).getPath() + "_" + Registry.BLOCK.getId(result).getPath();
 			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source));
@@ -79,7 +86,7 @@ public class RecipesHelper
 	
 	public static void makeFenceRecipe(Block source, Block fence)
 	{
-		if (Registry.BLOCK.getId(source) != null)
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
 		{
 			String name = Registry.BLOCK.getId(fence).getPath();
 			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "I", new ItemStack(Items.STICK));
@@ -89,7 +96,7 @@ public class RecipesHelper
 	
 	public static void makeGateRecipe(Block source, Block gate)
 	{
-		if (Registry.BLOCK.getId(source) != null)
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
 		{
 			String name = Registry.BLOCK.getId(gate).getPath();
 			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("I", new ItemStack(source), "#", new ItemStack(Items.STICK));
@@ -109,7 +116,7 @@ public class RecipesHelper
 	
 	public static void makeWallRecipe(Block source, Block wall)
 	{
-		if (Registry.BLOCK.getId(source) != null)
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
 		{
 			String name = Registry.BLOCK.getId(wall).getPath();
 			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source));
@@ -119,11 +126,81 @@ public class RecipesHelper
 	
 	public static void makeColoringRecipe(Block source, Block result, Item dye, String group)
 	{
-		if (Registry.BLOCK.getId(source) != null)
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
 		{
 			String name = Registry.BLOCK.getId(result).getPath();
 			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "I", new ItemStack(dye));
 			BNRecipeManager.addCraftingRecipe(name, group, SHAPE_COLORING, materials, new ItemStack(result, 8));
+		}
+	}
+	
+	public static void makeRoundRecipe(Block source, Block result, String group)
+	{
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
+		{
+			String name = Registry.BLOCK.getId(result).getPath();
+			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source));
+			BNRecipeManager.addCraftingRecipe(name, group, SHAPE_ROUND, materials, new ItemStack(result));
+		}
+	}
+	
+	public static void makeSignRecipe(Block source, Block result)
+	{
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
+		{
+			String name = Registry.BLOCK.getId(result).getPath();
+			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "I", new ItemStack(Items.STICK));
+			BNRecipeManager.addCraftingRecipe(name, "nether_sign", SHAPE_SIGN, materials, new ItemStack(result, 3));
+		}
+	}
+	
+	public static void makeBarrelRecipe(Block source, Block slab, Block result)
+	{
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
+		{
+			String name = Registry.BLOCK.getId(result).getPath();
+			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "S", new ItemStack(slab));
+			BNRecipeManager.addCraftingRecipe(name, "nether_barrel", SHAPE_BARREL, materials, new ItemStack(result));
+		}
+	}
+
+	public static void makeLadderRecipe(Block source, Block result)
+	{
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
+		{
+			String name = Registry.BLOCK.getId(result).getPath();
+			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "I", new ItemStack(Items.STICK));
+			BNRecipeManager.addCraftingRecipe(name, "nether_ladder", SHAPE_LADDER, materials, new ItemStack(result, 3));
+		}
+	}
+
+	public static void makeTaburetRecipe(Block source, Block result)
+	{
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
+		{
+			String name = Registry.BLOCK.getId(result).getPath();
+			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "I", new ItemStack(Items.STICK));
+			BNRecipeManager.addCraftingRecipe(name, "nether_ladder", SHAPE_TABURET, materials, new ItemStack(result));
+		}
+	}
+
+	public static void makeChairRecipe(Block source, Block result)
+	{
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
+		{
+			String name = Registry.BLOCK.getId(result).getPath();
+			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "I", new ItemStack(Items.STICK));
+			BNRecipeManager.addCraftingRecipe(name, "nether_ladder", SHAPE_CHAIR, materials, new ItemStack(result));
+		}
+	}
+	
+	public static void makeBarStoolRecipe(Block source, Block result)
+	{
+		if (Registry.BLOCK.getId(source) != Registry.BLOCK.getDefaultId())
+		{
+			String name = Registry.BLOCK.getId(result).getPath();
+			ImmutableMap<String, ItemStack> materials = ImmutableMap.of("#", new ItemStack(source), "I", new ItemStack(Items.STICK));
+			BNRecipeManager.addCraftingRecipe(name, "nether_ladder", SHAPE_BAR_STOOL, materials, new ItemStack(result));
 		}
 	}
 }

@@ -18,7 +18,11 @@
 	"ServerWorldMixin",
 	"MultiNoiseBiomeSourceMixin",
 	"BiomeMixin",
-	"RecipeManagerMixin"
+	"RecipeManagerMixin",
+	"CraftingScreenHandlerMixin",
+	"PickaxeItemMixin",
+	"ServerPlayNetworkHandlerMixin",
+	"SheepEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

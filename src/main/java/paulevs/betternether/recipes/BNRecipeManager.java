@@ -10,13 +10,16 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonSyntaxException;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.ShapedRecipe;
+import net.minecraft.recipe.ShapelessRecipe;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import paulevs.betternether.BetterNether;
+import paulevs.betternether.config.Config;
 
 public class BNRecipeManager
 {
@@ -24,13 +27,16 @@ public class BNRecipeManager
 	
 	public static void addRecipe(RecipeType<?> type, Recipe<?> recipe)
 	{
-		Map<Identifier, Recipe<?>> list = RECIPES.get(type);
-		if (list == null)
+		if (Config.getBoolean("recipes", recipe.getId().getPath(), true))
 		{
-			list = Maps.newHashMap();
-			RECIPES.put(type, list);
+			Map<Identifier, Recipe<?>> list = RECIPES.get(type);
+			if (list == null)
+			{
+				list = Maps.newHashMap();
+				RECIPES.put(type, list);
+			}
+			list.put(recipe.getId(), recipe);
 		}
-		list.put(recipe.getId(), recipe);
 	}
 	
 	public static Map<RecipeType<?>, Map<Identifier, Recipe<?>>> getMap(Map<RecipeType<?>, Map<Identifier, Recipe<?>>> recipes)
@@ -110,5 +116,11 @@ public class BNRecipeManager
 	private static Ingredient fromStacks(ItemStack... stacks)
 	{
 		return Ingredient.method_26964(Arrays.stream(stacks));
+	}
+	
+	public static ShapelessRecipe makeEmtyRecipe(Identifier id)
+	{
+		ShapelessRecipe recipe = new ShapelessRecipe(id, "empty", new ItemStack(Items.AIR), DefaultedList.of());
+		return recipe;
 	}
 }

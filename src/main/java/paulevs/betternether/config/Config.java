@@ -6,6 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,6 +17,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import paulevs.betternether.BetterNether;
 
 public class Config
@@ -24,7 +30,10 @@ public class Config
 	{
 		if (config == null)
 		{
-			File file = getFile();
+			File file = getFolder();
+			if (!file.exists())
+				file.mkdirs();
+			file = getFile();
 			if (file.exists())
 			{
 				Gson gson = new Gson();
@@ -36,6 +45,22 @@ public class Config
 					{
 						config = new JsonObject();
 						rewrite = true;
+					}
+					else
+					{
+						boolean rewrite = getBooleanLoad("config", "rewrite_on_version_update", true);
+						if (rewrite)
+						{
+							ModContainer mod = FabricLoader.getInstance().getModContainer(BetterNether.MOD_ID).get();
+							String versionActual = mod.getMetadata().getVersion().getFriendlyString();
+							String version = getStringLoad("config", "mod_version");
+							if (!version.equals(versionActual) || version.equals("${version}"))
+							{
+								config = new JsonObject();
+								rewrite = true;
+								setStringLoad("config", "mod_version", versionActual);
+							}
+						}
 					}
 				}
 				catch (FileNotFoundException e)
@@ -57,7 +82,10 @@ public class Config
 	{
 		if (rewrite)
 		{
-			File file = getFile();
+			File file = getFolder();
+			if (!file.exists())
+				file.mkdirs();
+			file = getFile();
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 			try
 			{
@@ -77,6 +105,11 @@ public class Config
 	private static File getFile()
 	{
 		return new File(String.format("./config/%s.json", BetterNether.MOD_ID));
+	}
+	
+	private static File getFolder()
+	{
+		return new File("./config/");
 	}
 
 	public static boolean getBoolean(String groups, String name, boolean def)
@@ -99,6 +132,50 @@ public class Config
 		}
 	}
 	
+	private static boolean getBooleanLoad(String groups, String name, boolean def)
+	{
+		name += "[def: " + def + "]";
+		
+		JsonObject group = getGroup(groups);
+		JsonElement element = group.get(name);
+		
+		if (element != null)
+		{
+			return element.getAsBoolean();
+		}
+		else
+		{
+			group.addProperty(name, def);
+			rewrite = true;
+			return def;
+		}
+	}
+	
+	private static String getStringLoad(String groups, String name)
+	{
+		JsonObject group = getGroup(groups);
+		JsonElement element = group.get(name);
+		
+		if (element != null)
+		{
+			return element.getAsString();
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
+	public static void setBoolean(String groups, String name, boolean def, boolean value)
+	{
+		name += "[def: " + def + "]";
+		
+		JsonObject group = getGroup(groups);
+		group.addProperty(name, value);
+		
+		rewrite = true;
+	}
+	
 	public static float getFloat(String groups, String name, float def)
 	{
 		load();
@@ -119,6 +196,16 @@ public class Config
 		}
 	}
 	
+	public static void setFloat(String groups, String name, float def, float value)
+	{
+		name += "[def: " + def + "]";
+		
+		JsonObject group = getGroup(groups);
+		group.addProperty(name, value);
+		
+		rewrite = true;
+	}
+	
 	public static int getInt(String groups, String name, int def)
 	{
 		load();
@@ -137,6 +224,42 @@ public class Config
 			rewrite = true;
 			return def;
 		}
+	}
+	
+	public static String getString(String groups, String name, String def)
+	{
+		load();
+		name += "[def: " + def + "]";
+		
+		JsonObject group = getGroup(groups);
+		JsonElement element = group.get(name);
+		
+		if (element != null)
+		{
+			return element.getAsString();
+		}
+		else
+		{
+			group.addProperty(name, def);
+			rewrite = true;
+			return def;
+		}
+	}
+	
+	public static void setInt(String groups, String name, int def, int value)
+	{
+		name += "[def: " + def + "]";
+		
+		JsonObject group = getGroup(groups);
+		group.addProperty(name, value);
+		
+		rewrite = true;
+	}
+	
+	public static void setStringLoad(String groups, String name, String value)
+	{
+		JsonObject group = getGroup(groups);
+		group.addProperty(name, value);
 	}
 	
 	public static String[] getStringArray(String groups, String name, String[] def)
@@ -176,7 +299,7 @@ public class Config
 		return result;
 	}
 	
-	private static JsonObject getGroup(String groups)
+	public static JsonObject getGroup(String groups)
 	{
 		JsonObject obj = config;
 		String[] groupsArr = groups.split("\\.");
@@ -191,5 +314,25 @@ public class Config
 			obj = jGroup;
 		}
 		return obj;
+	}
+
+	public static List<String> getBaseGroups()
+	{
+		List<String> groups = new ArrayList<String>();
+		Iterator<Entry<String, JsonElement>> iterator = config.entrySet().iterator();
+		iterator.forEachRemaining((element) -> { groups.add(element.getKey()); });
+		return groups;
+	}
+	
+	public static List<Entry<String, JsonElement>> getGroupMembers(JsonObject group)
+	{
+		List<Entry<String, JsonElement>> result = new ArrayList<Entry<String, JsonElement>>();
+		result.addAll(group.entrySet());
+		return result;
+	}
+
+	public static void markToSave()
+	{
+		rewrite = true;
 	}
 }

@@ -7,7 +7,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
+import net.minecraft.fluid.LavaFluid;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.BlockMirror;
@@ -28,6 +28,7 @@ public class BlocksHelper
 	public static final int FLAG_IGNORE_OBSERVERS = 16;
 	
 	public static final int SET_SILENT = FLAG_UPDATE_BLOCK | FLAG_IGNORE_OBSERVERS | FLAG_SEND_CLIENT_CHANGES;
+	public static final Direction[] HORIZONTAL = new Direction[] {Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST};
 	
 	private static final Vec3i[] OFFSETS = new Vec3i[] {
 			new Vec3i(-1, -1, -1), new Vec3i(-1, -1, 0), new Vec3i(-1, -1, 1),
@@ -45,50 +46,39 @@ public class BlocksHelper
 	
 	public static boolean isLava(BlockState state)
 	{
-		return state.getMaterial() == Material.LAVA;
+		return state.getFluidState().getFluid() instanceof LavaFluid;
 	}
 	
 	public static boolean isNetherrack(BlockState state)
 	{
-		Block b = state.getBlock();
-		return  b == Blocks.NETHERRACK ||
-				b == Blocks.NETHER_QUARTZ_ORE ||
-				b == Blocks.NETHER_GOLD_ORE ||
-				b == Blocks.CRIMSON_NYLIUM ||
-				b == Blocks.WARPED_NYLIUM ||
-				b == BlocksRegistry.CINCINNASITE_ORE ||
-				b == BlocksRegistry.NETHER_RUBY_ORE ||
-				b == BlocksRegistry.NETHERRACK_MOSS ||
-				b == BlocksRegistry.NETHER_MYCELIUM ||
-				b == BlocksRegistry.JUNGLE_GRASS;
+		return state.isIn(NetherTags.NETHERRACK);
 	}
 	
 	public static boolean isSoulSand(BlockState state)
 	{
-		Block b = state.getBlock();
-		return  b == Blocks.SOUL_SAND ||
-				b == Blocks.SOUL_SOIL;
+		return state.isIn(NetherTags.SOUL_GROUND_BLOCK);
 	}
 	
 	public static boolean isNetherGround(BlockState state)
 	{
-		Block b = state.getBlock();
-		return  isNetherrack(state) ||
-				isSoulSand(state) ||
-				b == BlocksRegistry.FARMLAND;
+		return isNetherrack(state) || isSoulSand(state) || isNetherMycelium(state)|| isNylium(state);
+		//return state.isIn(NetherTags.NETHER_GROUND);
 	}
 	
 	public static boolean isNetherGroundMagma(BlockState state)
 	{
-		Block b = state.getBlock();
-		return  isNetherGround(state) || b == Blocks.MAGMA_BLOCK;
+		return  isNetherGround(state) || state.getBlock() == Blocks.MAGMA_BLOCK;
 	}
 	
 	public static boolean isBone(BlockState state)
 	{
 		Block b = state.getBlock();
-		return  b == Blocks.BONE_BLOCK ||
-				b == BlocksRegistry.BONE_BLOCK;
+		return b == Blocks.BONE_BLOCK || b == BlocksRegistry.BONE_BLOCK;
+	}
+	
+	public static boolean isNetherMycelium(BlockState state)
+	{
+		return state.isIn(NetherTags.MYCELIUM);
 	}
 	
 	public static void setWithoutUpdate(WorldAccess world, BlockPos pos, BlockState state)
@@ -169,5 +159,10 @@ public class BlocksHelper
 				BlocksHelper.setWithoutUpdate(world, pos, cover);
 			}
 		}
+	}
+
+	public static boolean isNylium(BlockState state)
+	{
+		return state.isIn(NetherTags.NYLIUM);
 	}
 }

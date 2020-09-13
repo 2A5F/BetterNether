@@ -26,7 +26,7 @@ import paulevs.betternether.blocks.materials.Materials;
 
 public class BlockNetherGrass extends BlockBase
 {
-	private static final VoxelShape SHAPE = Block.createCuboidShape(2, 0, 2, 14, 14, 14);
+	private static final VoxelShape SHAPE = Block.createCuboidShape(2, 0, 2, 14, 12, 14);
 	
 	public BlockNetherGrass()
 	{
@@ -57,7 +57,7 @@ public class BlockNetherGrass extends BlockBase
 	@Override
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
 	{
-		return BlocksHelper.isNetherGround(world.getBlockState(pos.down()));
+		return BlocksHelper.isNetherrack(world.getBlockState(pos.down())) || BlocksHelper.isNylium(world.getBlockState(pos.down()));
 	}
 	
 	@Override
